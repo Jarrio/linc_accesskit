@@ -1,0 +1,18 @@
+<xml>
+    <!-- Each class bound with linc.Linc.xml('accesskit') includes this file. Read it once, or every include adds the
+         library to the link again. -->
+    <pragma once="true" />
+
+    <files id="haxe">
+        <compilerflag value="-I${LINC_ACCESSKIT_PATH}vendor/android/include/" if="android" />
+    </files>
+
+    <target id="haxe">
+        <!-- The static library from `haxe --run Fetch android`. Its shared one is 4 KB aligned, which Android's 16 KB
+             page devices refuse; linked in here it takes libmain.so's alignment. -->
+        <section if="android">
+            <lib name="${LINC_ACCESSKIT_PATH}vendor/android/lib/arm64-v8a/libaccesskit.a" if="HXCPP_ARM64" />
+            <lib name="${LINC_ACCESSKIT_PATH}vendor/android/lib/x86_64/libaccesskit.a" if="HXCPP_X86_64" />
+        </section>
+    </target>
+</xml>

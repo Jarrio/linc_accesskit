@@ -1,0 +1,20 @@
+{
+	"name": "linc_accesskit",
+	"url": "https://github.com/Jarrio/linc_accesskit",
+	"license": "MIT",
+	"tags": [
+		"accesskit",
+		"accessibility",
+		"linc",
+		"native",
+		"cpp"
+	],
+	"description": "Links AccessKit's C library, for screen readers",
+	"version": "0.1.0",
+	"classPath": "",
+	"releasenote": "AccessKit 0.23.2 on Android",
+	"contributors": [
+		"Jarrio"
+	],
+	"dependencies": {}
+}
