@@ -9,12 +9,14 @@
 		"native",
 		"cpp"
 	],
-	"description": "Links AccessKit's C library, for screen readers",
+	"description": "Haxe bindings for AccessKit's C library, for screen readers; Android for now",
 	"version": "0.1.0",
 	"classPath": "",
 	"releasenote": "AccessKit 0.23.2 on Android",
 	"contributors": [
 		"Jarrio"
 	],
-	"dependencies": {}
+	"dependencies": {
+		"linc_sdl3": ""
+	}
 }

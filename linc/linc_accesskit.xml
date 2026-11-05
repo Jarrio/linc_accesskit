@@ -4,7 +4,10 @@
     <pragma once="true" />
 
     <files id="haxe">
+        <depend name="${LINC_ACCESSKIT_PATH}linc/linc_accesskit.h" />
+        <compilerflag value="-I${LINC_ACCESSKIT_PATH}linc/" />
         <compilerflag value="-I${LINC_ACCESSKIT_PATH}vendor/android/include/" if="android" />
+        <file name="${LINC_ACCESSKIT_PATH}linc/linc_accesskit.cpp" if="android" />
     </files>
 
     <target id="haxe">
