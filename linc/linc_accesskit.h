@@ -26,8 +26,9 @@ namespace linc {
 		void commit(double width, double height);
 
 		/**
-			An action that came in since the last call, as its node's id times 4 plus 0 for a click, 1 for scrolling down
-			or a step up, 2 for scrolling up or a step down, 3 for a new value (`nextNumber`); or -1.
+			An action that came in since the last call, as its node's id times 8 plus 0 for a click, 1 for scrolling down
+			or a step up, 2 for scrolling up or a step down, 3 for a new value (`nextNumber`), 4 for showing the node whole
+			on screen; or -1.
 		**/
 		int nextAction();
 

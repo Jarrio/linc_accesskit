@@ -19,12 +19,15 @@ class AccessKit {
 	public static inline var ROLE_SCROLL_VIEW = 9;
 	public static inline var ROLE_SLIDER = 10;
 
-	/** What `nextAction` carries, in its low two bits; its node's id is in the rest. **/
+	/** What `nextAction` carries, in its low three bits; its node's id is in the rest. **/
 	public static inline var ACTION_CLICK = 0;
 
 	public static inline var ACTION_STEP_UP = 1;
 	public static inline var ACTION_STEP_DOWN = 2;
 	public static inline var ACTION_SET_NUMBER = 3;
+
+	/** Show the node whole on screen, scrolling what it's in: Android's "show on screen" action. **/
+	public static inline var ACTION_SHOW = 4;
 
 	/**
 		Starts the adapter. `activityClass`, as JNI writes it ("org/simple/app/MainActivity"), must declare the native
@@ -50,7 +53,7 @@ class AccessKit {
 		Native.commit(width, height);
 	}
 
-	/** An action that came in since the last call, as its node's id times 4 plus an `ACTION_*`; or -1. **/
+	/** An action that came in since the last call, as its node's id times 8 plus an `ACTION_*`; or -1. **/
 	public static function nextAction():Int {
 		return Native.nextAction();
 	}

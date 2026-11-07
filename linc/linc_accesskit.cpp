@@ -145,11 +145,23 @@ static accesskit_tree_update *ak_tree(void *) {
 	return update;
 }
 
-// An action waits as its node id times 4 plus 0 for a click, 1 for scrolling down or a step up, 2 for scrolling up or a
-// step down, 3 for a new value, which waits as well.
+// Android's AccessibilityAction.ACTION_SHOW_ON_SCREEN (android.R.id.accessibilityActionShowOnScreen), which AccessKit's
+// adapter doesn't handle: ak_action sends it through as an input focus request, the one action AccessKit passes on for
+// any node, with ak_showing set, so ak_do gets it with the app's own node id.
+static const jint AK_SHOW_ON_SCREEN = 0x01020036;
+static const jint AK_ANDROID_FOCUS = 1;
+static bool ak_showing = false;
+
+// An action waits as its node id times 8 plus 0 for a click, 1 for scrolling down or a step up, 2 for scrolling up or a
+// step down, 3 for a new value, which waits as well, and 4 for showing the node whole on screen.
 static void ak_do(accesskit_action_request *request, void *) {
 	int code = -1;
 	switch (request->action) {
+		case ACCESSKIT_ACTION_FOCUS:
+			if (ak_showing) {
+				code = 4;
+			}
+			break;
 		case ACCESSKIT_ACTION_CLICK: code = 0; break;
 		case ACCESSKIT_ACTION_SCROLL_DOWN: case ACCESSKIT_ACTION_INCREMENT: code = 1; break;
 		case ACCESSKIT_ACTION_SCROLL_UP: case ACCESSKIT_ACTION_DECREMENT: code = 2; break;
@@ -163,7 +175,7 @@ static void ak_do(accesskit_action_request *request, void *) {
 	if (code >= 0) {
 		{
 			std::lock_guard<std::mutex> guard(ak_lock);
-			ak_actions.push_back((int)request->target_node * 4 + code);
+			ak_actions.push_back((int)request->target_node * 8 + code);
 			if (code == 3) {
 				ak_numbers.push_back(request->data.value.numeric_value);
 			}
@@ -182,11 +194,16 @@ static jobject JNICALL ak_focus(JNIEnv *env, jclass, jobject host, jint type) {
 }
 
 static jboolean JNICALL ak_action(JNIEnv *env, jclass, jobject host, jint id, jint action, jobject arguments) {
-	accesskit_android_platform_action *platform = accesskit_android_platform_action_from_java(env, action, arguments);
+	bool show = action == AK_SHOW_ON_SCREEN;
+	accesskit_android_platform_action *platform = accesskit_android_platform_action_from_java(env, show ? AK_ANDROID_FOCUS : action,
+		show ? nullptr : arguments);
 	if (!platform) {
 		return JNI_FALSE;
 	}
+	// AccessKit calls ak_do before it returns, on this thread.
+	ak_showing = show;
 	accesskit_android_queued_events *events = accesskit_android_adapter_perform_action(ak_adapter, ak_do, nullptr, id, platform);
+	ak_showing = false;
 	accesskit_android_platform_action_free(platform);
 	if (!events) {
 		return JNI_FALSE;
