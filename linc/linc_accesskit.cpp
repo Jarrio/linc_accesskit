@@ -221,6 +221,16 @@ static jboolean JNICALL ak_hover(JNIEnv *env, jclass, jobject host, jint action,
 	return JNI_TRUE;
 }
 
+// Android's accessibility turned on or off (MainActivity's listener). While it's off nothing reads the tree, so the
+// app stops building it; turned back on, the app wakes to send what changed meanwhile, as the adapter keeps the last
+// tree it was given and would hand that out.
+static void JNICALL ak_state(JNIEnv *, jclass, jboolean enabled) {
+	ak_active.store(enabled == JNI_TRUE);
+	if (enabled == JNI_TRUE) {
+		ak_wake();
+	}
+}
+
 static void JNICALL ak_update(JNIEnv *env, jclass, jobject host) {
 	accesskit_android_queued_events *events = accesskit_android_adapter_update_if_active(ak_adapter, ak_tree, nullptr);
 	if (events) {
@@ -251,8 +261,9 @@ void start(const char *activityClass) {
 		{(char *)"nativeAccessibilityAction", (char *)"(Landroid/view/View;IILandroid/os/Bundle;)Z", (void *)ak_action},
 		{(char *)"nativeAccessibilityHover", (char *)"(Landroid/view/View;IFF)Z", (void *)ak_hover},
 		{(char *)"nativeAccessibilityUpdate", (char *)"(Landroid/view/View;)V", (void *)ak_update},
+		{(char *)"nativeAccessibilityState", (char *)"(Z)V", (void *)ak_state},
 	};
-	if (env->RegisterNatives(activity, methods, 5) != 0) {
+	if (env->RegisterNatives(activity, methods, 6) != 0) {
 		env->ExceptionClear();
 		return;
 	}

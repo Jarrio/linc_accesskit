@@ -9,12 +9,13 @@ namespace linc {
 		/**
 			Starts AccessKit's Android adapter. `activityClass`, as JNI writes it, must declare the native methods this
 			registers (nativeAccessibilityNode, nativeAccessibilityFocus, nativeAccessibilityAction,
-			nativeAccessibilityHover, nativeAccessibilityUpdate), a static boolean `accessibilityReady`, which this sets,
-			and a static `requestAccessibilityUpdate()`, called after each `commit`.
+			nativeAccessibilityHover, nativeAccessibilityUpdate, nativeAccessibilityState), a static boolean
+			`accessibilityReady`, which this sets, and a static `requestAccessibilityUpdate()`, called after each `commit`.
+			The activity calls nativeAccessibilityState(enabled) when Android's accessibility turns on or off.
 		**/
 		void start(const char *activityClass);
 
-		/** Whether the system has asked for the tree. **/
+		/** Whether something reads the tree: true once the system asks for it, false while Android's accessibility is off. **/
 		bool active();
 
 		/** Adds a node to the tree being built; `toggled` is -1 for neither. **/

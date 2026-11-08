@@ -37,7 +37,7 @@ class AccessKit {
 		Native.start(activityClass);
 	}
 
-	/** Whether the system has asked for the tree. **/
+	/** Whether something reads the tree: true once the system asks for it, false while Android's accessibility is off. **/
 	public static function active():Bool {
 		return Native.active();
 	}
