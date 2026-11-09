@@ -18,10 +18,10 @@ namespace linc {
 		/** Whether something reads the tree: true once the system asks for it, false while Android's accessibility is off. **/
 		bool active();
 
-		/** Adds a node to the tree being built; `toggled` is -1 for neither. **/
+		/** Adds a node to the tree being built; `toggled` is -1 for neither, `level` a heading's (0 for none). **/
 		void add(int id, int parent, int role, const char *label, const char *value, int toggled, bool disabled, bool clickable,
 			double x0, double y0, double x1, double y1, double scrollY, double scrollMax, bool numeric, double number,
-			double numberMin, double numberMax);
+			double numberMin, double numberMax, int level);
 
 		/** Makes the tree built with `add` the current one, in a window of this size in pixels. **/
 		void commit(double width, double height);

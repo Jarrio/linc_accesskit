@@ -33,6 +33,7 @@ struct Node {
 	double scrollY, scrollMax;
 	bool numeric;
 	double number, numberMin, numberMax;
+	int level;
 };
 
 static std::mutex ak_lock;
@@ -67,6 +68,8 @@ static accesskit_role ak_role(int role) {
 		case 8: return ACCESSKIT_ROLE_IMAGE;
 		case 9: return ACCESSKIT_ROLE_SCROLL_VIEW;
 		case 10: return ACCESSKIT_ROLE_SLIDER;
+		case 11: return ACCESSKIT_ROLE_LINK;
+		case 12: return ACCESSKIT_ROLE_HEADING;
 		default: return ACCESSKIT_ROLE_GENERIC_CONTAINER;
 	}
 }
@@ -104,6 +107,9 @@ static accesskit_tree_update *ak_tree(void *) {
 			if (!item.value.empty()) {
 				accesskit_node_set_value(node, item.value.c_str());
 			}
+		}
+		if (item.level > 0) {
+			accesskit_node_set_level(node, (size_t)item.level);
 		}
 		if (item.toggled >= 0) {
 			accesskit_node_set_toggled(node, item.toggled ? ACCESSKIT_TOGGLED_TRUE : ACCESSKIT_TOGGLED_FALSE);
@@ -277,8 +283,8 @@ void start(const char *activityClass) {
 	env->DeleteLocalRef(activity);
 }
 
-void add(int id, int parent, int role, const char *label, const char *value, int toggled, bool disabled, bool clickable, double x0, double y0, double x1, double y1, double scrollY, double scrollMax, bool numeric, double number, double numberMin, double numberMax) {
-	ak_building.push_back({(uint64_t)id, (uint64_t)parent, role, std::string(label), std::string(value), toggled, disabled, clickable, x0, y0, x1, y1, scrollY, scrollMax, numeric, number, numberMin, numberMax});
+void add(int id, int parent, int role, const char *label, const char *value, int toggled, bool disabled, bool clickable, double x0, double y0, double x1, double y1, double scrollY, double scrollMax, bool numeric, double number, double numberMin, double numberMax, int level) {
+	ak_building.push_back({(uint64_t)id, (uint64_t)parent, role, std::string(label), std::string(value), toggled, disabled, clickable, x0, y0, x1, y1, scrollY, scrollMax, numeric, number, numberMin, numberMax, level});
 }
 
 void commit(double width, double height) {

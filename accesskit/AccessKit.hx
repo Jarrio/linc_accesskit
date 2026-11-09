@@ -42,10 +42,14 @@ class AccessKit {
 		return Native.active();
 	}
 
-	/** Adds a node to the tree being built, in pixels; `parent` 0 is the window, `toggled` -1 for neither. **/
+	/**
+		Adds a node to the tree being built, in pixels; `parent` 0 is the window, `toggled` -1 for neither, `level` a
+		heading's (0 for none).
+	**/
 	public static function add(id:Int, parent:Int, role:Int, label:String, value:String, toggled:Int, disabled:Bool, clickable:Bool, x0:Float, y0:Float,
-			x1:Float, y1:Float, scrollY:Float, scrollMax:Float, numeric:Bool, number:Float, numberMin:Float, numberMax:Float) {
-		Native.add(id, parent, role, label, value, toggled, disabled, clickable, x0, y0, x1, y1, scrollY, scrollMax, numeric, number, numberMin, numberMax);
+			x1:Float, y1:Float, scrollY:Float, scrollMax:Float, numeric:Bool, number:Float, numberMin:Float, numberMax:Float, level:Int = 0) {
+		Native.add(id, parent, role, label, value, toggled, disabled, clickable, x0, y0, x1, y1, scrollY, scrollMax, numeric, number, numberMin, numberMax,
+			level);
 	}
 
 	/** Makes the tree built with `add` the current one, in a window of this size in pixels. **/

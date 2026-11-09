@@ -19,7 +19,7 @@ extern class Native {
 
 	@:native("linc::accesskit::add")
 	static function add(id:Int, parent:Int, role:Int, label:ConstCharStar, value:ConstCharStar, toggled:Int, disabled:Bool, clickable:Bool, x0:Float,
-		y0:Float, x1:Float, y1:Float, scrollY:Float, scrollMax:Float, numeric:Bool, number:Float, numberMin:Float, numberMax:Float):Void;
+		y0:Float, x1:Float, y1:Float, scrollY:Float, scrollMax:Float, numeric:Bool, number:Float, numberMin:Float, numberMax:Float, level:Int):Void;
 
 	@:native("linc::accesskit::commit")
 	static function commit(width:Float, height:Float):Void;
